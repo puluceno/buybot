@@ -1,0 +1,5 @@
+rootProject.name = 'buybot'
+include 'buyer'
+include 'scraper'
+include 'scraper'
+
