@@ -1,5 +1,6 @@
 package com.pulu.scraper;
 
+import com.pulu.scraper.model.Product;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import javax.swing.*;
@@ -19,20 +20,16 @@ public class View {
     public boolean inStock = false;
     public boolean muteSound = false;
 
-    private List<String> data3080 = new ArrayList<>();
-    private List<String> data6800xt = new ArrayList<>();
-    private List<String> dataCpu = new ArrayList<>();
-    private List<String> dataPS5 = new ArrayList<>();
+    private List<Product> data3080 = new ArrayList<>();
+    private List<Product> data6800xt = new ArrayList<>();
+    private List<Product> dataCpu = new ArrayList<>();
+    private List<Product> dataPS5 = new ArrayList<>();
 
     JFrame frame = new JFrame();
     private final UrlTextPane pane3080 = new UrlTextPane();
     private final UrlTextPane pane6800xt = new UrlTextPane();
     private final UrlTextPane paneCpu = new UrlTextPane();
     private final UrlTextPane panePS5 = new UrlTextPane();
-
-    private final JLabel neweggLabel = new JLabel("Newegg");
-    private final JLabel bestbuyLabel = new JLabel("Bestbuy");
-    private final JLabel bhBhotoLabel = new JLabel("BH Photo Video");
 
     private final JTextField urlNewegg3080 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3080&N=100007709%20601357282%204021&isdeptsrh=1");
     private final JTextField urlNewegg6800xt = new JTextField("https://www.newegg.com/p/pl?d=radeon+6800+XT&N=100007709&isdeptsrh=1");
@@ -110,16 +107,19 @@ public class View {
         urlContainer.add(new JLabel("Radeon 6800XT URLS"));
         urlContainer.add(new JLabel("AMD Ryzen 5000 Series CPU URLS"));
         urlContainer.add(new JLabel("Playstation 5 URLS"));
+        JLabel neweggLabel = new JLabel("Newegg");
         urlContainer.add(neweggLabel);
         urlContainer.add(urlNewegg3080);
         urlContainer.add(urlNewegg6800xt);
         urlContainer.add(urlNeweggCpu);
         urlContainer.add(urlNeweggPS5);
+        JLabel bestbuyLabel = new JLabel("Bestbuy");
         urlContainer.add(bestbuyLabel);
         urlContainer.add(urlBestbuy3080);
         urlContainer.add(urlBestbuy6800xt);
         urlContainer.add(urlBestbuyCpu);
         urlContainer.add(urlBestbuyPS5);
+        JLabel bhBhotoLabel = new JLabel("BH Photo Video");
         urlContainer.add(bhBhotoLabel);
         urlContainer.add(urlBhPhoto3080);
         urlContainer.add(urlBhPhoto6800xt);
@@ -151,19 +151,19 @@ public class View {
         });
     }
 
-    public void set3080Content(List<String> data) {
+    public void set3080Content(List<Product> data) {
         data3080 = data;
     }
 
-    public void set6800xtContent(List<String> data) {
+    public void set6800xtContent(List<Product> data) {
         data6800xt = data;
     }
 
-    public void setCpuContent(List<String> data) {
+    public void setCpuContent(List<Product> data) {
         dataCpu = data;
     }
 
-    public void setPs5Content(List<String> data) {
+    public void setPs5Content(List<Product> data) {
         dataPS5 = data;
     }
 
@@ -212,9 +212,9 @@ public class View {
         return panel;
     }
 
-    private String convertText(List<String> data) {
+    private String convertText(List<Product> data) {
 
-        if (data.size() == 0) {
+        if (data.isEmpty()) {
             return "";
         }
 
@@ -224,16 +224,15 @@ public class View {
         StringBuilder answer = new StringBuilder();
         answer.append("<html><body>");
 
-        for (String entry : data) {
-            String[] split = entry.split("‽");
-            String content = StringEscapeUtils.escapeHtml4(split[1]).replace(" ", "%20");
+        for (Product product : data) {
+            String content = StringEscapeUtils.escapeHtml4(product.getUrl()).replace(" ", "%20");
             int lastIndex = 0;
             Matcher matcher = urlPattern.matcher(content);
             while (matcher.find()) {
                 //Append everything since last update to the url:
                 answer.append(content, lastIndex, matcher.start());
                 String url = content.substring(matcher.start(), matcher.end()).trim();
-                answer.append("<a href=\"" + url + "\">" + split[0] + "</a>");
+                answer.append("<a href=\"" + url + "\">" + product.getName() + "</a>");
                 lastIndex = matcher.end();
             }
             answer.append(content.substring(lastIndex));

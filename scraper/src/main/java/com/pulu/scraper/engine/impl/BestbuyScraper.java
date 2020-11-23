@@ -1,5 +1,6 @@
 package com.pulu.scraper.engine.impl;
 
+import com.pulu.scraper.model.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -19,19 +20,19 @@ public class BestbuyScraper extends DefaultScraper {
     private static final String LINK_PREFIX = "https://www.bestbuy.com";
 
     @Override
-    public List<String> scrape(String uri, boolean inStock) {
+    public List<Product> scrape(String uri, boolean inStock) {
 
         if (!uri.contains("bestbuy")) {
             return Collections.emptyList();
         }
-        List ret = new ArrayList<String>();
+        List<Product> ret = new ArrayList<>();
 
         try {
             Document page = Jsoup.parse(new URL(uri), 8000);
 
 
             page.select("div[class=right-column]").forEach(it -> {
-                String product = it.select("h4[class=sku-header] > a").text();
+                String name = it.select("h4[class=sku-header] > a").text();
                 String link = LINK_PREFIX + it.select("h4[class=sku-header] > a").attr("href");
                 String stock = it.select("div[class=sku-list-item-button]").text().toUpperCase();
                 if (inStock) {
@@ -39,13 +40,13 @@ public class BestbuyScraper extends DefaultScraper {
                             stock.contains(CHECK_STORES) || stock.contains(SHOP_OPEN_BOX) ||
                             stock.contains(COMING_SOON)) {
 
-                        ret.add(product + "‽" + link);
+                        ret.add(new Product(name, link));
                     }
                 } else {
                     if (!stock.contains(AUTO_NOTIFY) && !stock.contains(SOLD_OUT) &&
                             !stock.contains(CHECK_STORES) && !stock.contains(SHOP_OPEN_BOX) &&
                             !stock.contains(COMING_SOON)) {
-                        ret.add(product + "‽" + link);
+                        ret.add(new Product(name, link));
                     }
                 }
             });

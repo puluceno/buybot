@@ -6,6 +6,7 @@ import com.pulu.scraper.engine.impl.BestbuyScraper;
 import com.pulu.scraper.engine.impl.BhPhotoScraper;
 import com.pulu.scraper.engine.impl.DefaultScraper;
 import com.pulu.scraper.engine.impl.NeweggScraper;
+import com.pulu.scraper.model.Product;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.sound.sampled.*;
@@ -31,10 +32,10 @@ public class Runner {
     private static final Logger logger = Logger.getLogger("pooplog");
 
     public static void main(String[] args) {
-        List<String> scrape3080;
-        List<String> scrape6800xt;
-        List<String> scrapeCpu;
-        List<String> scrapePs5;
+        List<Product> scrape3080;
+        List<Product> scrape6800xt;
+        List<Product> scrapeCpu;
+        List<Product> scrapePs5;
 
         Scraper scraper = new DefaultScraper(new BestbuyScraper(), new NeweggScraper(), new BhPhotoScraper());
 
@@ -60,14 +61,16 @@ public class Runner {
 
                     scrapePs5 = scraper.scrape(Arrays.asList(urls.get(3), urls.get(7), urls.get(11)), false);
 
-                    startAlert(view, scrape3080, scrape6800xt, scrapeCpu, scrapePs5);
+                    List<Product> products = Stream.of(scrape3080, scrape6800xt, scrapeCpu, scrapePs5).
+                            flatMap(Collection::stream).collect(Collectors.toList());
+
+                    startAlert(view, products);
 
                     if (triggerBuyer) {
 
-                        List<String> neweggLinks = Stream.of(scrape3080, scrape6800xt, scrapeCpu, scrapePs5).
-                                flatMap(Collection::stream)
-                                .filter(s -> StringUtils.containsIgnoreCase(s, "newegg"))
-                                .map(s -> s.split("‽")[1])
+                        List<String> neweggLinks = products.stream()
+                                .filter(p -> StringUtils.containsIgnoreCase(p.getUrl(), "newegg"))
+                                .map(Product::getUrl)
                                 .collect(Collectors.toList());
 
                         triggerBuyer(neweggLinks);
@@ -99,18 +102,17 @@ public class Runner {
         });
     }
 
-    private static void startAlert(View view, List<String>... scrapeResult) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        for (List<String> result : scrapeResult) {
-            for (String item : result) {
-                logger.info(item.split("‽")[0] + " IN STOCK\r\n      " + item.split("‽")[1]);
-            }
-            if (!view.muteSound && !result.isEmpty()) {
-                bufferedInputStream = new BufferedInputStream(Objects.requireNonNull(Runner.class.getClassLoader().getResourceAsStream("alert.wav")));
-                audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            }
+    private static void startAlert(View view, List<Product> scrapeResult) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        for (Product product : scrapeResult) {
+            logger.info(product.getName() + " IN STOCK\r\n      " + product.getUrl());
+        }
+        if (!view.muteSound && !scrapeResult.isEmpty()) {
+            bufferedInputStream = new BufferedInputStream(Objects.requireNonNull(Runner.class.getClassLoader().getResourceAsStream("alert.wav")));
+            audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+
         }
     }
 

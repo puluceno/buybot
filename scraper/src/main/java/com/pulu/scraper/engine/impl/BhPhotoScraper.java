@@ -1,5 +1,6 @@
 package com.pulu.scraper.engine.impl;
 
+import com.pulu.scraper.model.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -13,28 +14,28 @@ public class BhPhotoScraper extends DefaultScraper {
     private static final String LINK_PREFIX = "https://www.bhphotovideo.com";
 
     @Override
-    public List<String> scrape(String uri, boolean viewInStock) {
+    public List<Product> scrape(String uri, boolean viewInStock) {
         if (!uri.contains("bhphotovideo")) {
             return Collections.emptyList();
         }
 
-        List ret = new ArrayList<String>();
+        List<Product> ret = new ArrayList<>();
 
         try {
             Document page = Jsoup.connect(uri).get();
 
             page.getElementsByAttributeValue("data-selenium", "miniProductPageProduct").forEach(it -> {
-                String product = it.getElementsByAttributeValue("data-selenium", "miniProductPageProductName").text();
+                String name = it.getElementsByAttributeValue("data-selenium", "miniProductPageProductName").text();
                 String link = LINK_PREFIX + it.getElementsByAttributeValue("data-selenium", "miniProductPageProductNameLink").attr("href");
                 boolean itemInStock = it.getElementsByAttributeValue("data-selenium", "addToCartButton").size() > 0;
 
                 if (!viewInStock) {
                     if (itemInStock) {
-                        ret.add(product + "‽" + link);
+                        ret.add(new Product(name, link));
                     }
                 } else {
                     if (!itemInStock) {
-                        ret.add(product + "‽" + link);
+                        ret.add(new Product(name, link));
                     }
                 }
             });

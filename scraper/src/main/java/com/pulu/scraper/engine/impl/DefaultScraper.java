@@ -1,6 +1,7 @@
 package com.pulu.scraper.engine.impl;
 
 import com.pulu.scraper.engine.Scraper;
+import com.pulu.scraper.model.Product;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +25,7 @@ public class DefaultScraper implements Scraper {
     }
 
     @Override
-    public List<String> scrape(String uri, boolean inStock) {
+    public List<Product> scrape(String uri, boolean inStock) {
         try {
             if (uri.contains("newegg")) {
                 return neweggScraper.scrape(uri, inStock);
@@ -40,7 +41,7 @@ public class DefaultScraper implements Scraper {
     }
 
     @Override
-    public List<String> scrape(List<String> uris, boolean inStock) {
+    public List<Product> scrape(List<String> uris, boolean inStock) {
         return uris.parallelStream().map(uri -> {
             if (uri.contains("newegg")) {
                 return neweggScraper.scrape(uri, inStock);
@@ -49,7 +50,7 @@ public class DefaultScraper implements Scraper {
             } else if (uri.contains("bhphotovideo")) {
                 return bhphotoScraper.scrape(uri, inStock);
             }
-            return Collections.<String>emptyList();
+            return Collections.<Product>emptyList();
         }).flatMap(listContainer -> listContainer.stream()).collect(Collectors.toList());
     }
 }
