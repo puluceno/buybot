@@ -1,6 +1,5 @@
 .gradle/
 .idea/
-**.log
-**.lck
-**.jar
-**.class
+**build
+*.log
+*.lck
