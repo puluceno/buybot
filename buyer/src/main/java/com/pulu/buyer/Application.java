@@ -27,6 +27,8 @@ public class Application {
         try {
             long begin = System.currentTimeMillis();
 
+            System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+
             ChromeOptions options = new ChromeOptions();
 //            options.addArguments("start-maximized");
             System.setProperty("webdriver.chrome.args", "--disable-logging");
@@ -46,14 +48,14 @@ public class Application {
 
                     exists(driver, By.xpath("//*[text()='" + "Sign in / Register" + "']"), 3).ifPresent(WebElement::click);
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
-
-                    exists(driver, By.name("signEmail"), MAX_TIMEOUT).ifPresent(el -> el.sendKeys("puluceno@gmail.com"));
+//TODO: LOGIN
+                    exists(driver, By.name("signEmail"), MAX_TIMEOUT).ifPresent(el -> el.sendKeys("YOUR NEWEGG EMAIL "));
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
 
                     exists(driver, By.name("signIn"), MAX_TIMEOUT).ifPresent(WebElement::click);
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
-
-                    exists(driver, By.name("password"), MAX_TIMEOUT).ifPresent(el -> el.sendKeys("909abcX*"));
+//TODO: PASSWORD
+                    exists(driver, By.name("password"), MAX_TIMEOUT).ifPresent(el -> el.sendKeys("YOUR NEWEGG PASSWORD"));
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
 
                     exists(driver, By.name("signIn"), MAX_TIMEOUT).ifPresent(WebElement::click);
@@ -70,10 +72,10 @@ public class Application {
 
                     exists(driver, By.xpath("//*[text()='" + " Secure Checkout " + "']"), MAX_TIMEOUT).ifPresent(WebElement::click);
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
-
+//TODO: CREDIT CARD CVV
                     exists(driver, By.cssSelector("#app > div > section > div > div > form > div.row-inner > div.row-body > div > div:nth-child(3) > div > div.checkout-step-body > div.checkout-step-done > div.card > div.retype-security-code > input"), MAX_TIMEOUT).ifPresent(el -> {
                         el.click();
-                        el.sendKeys("794");
+                        el.sendKeys("CREDIT CARD CVV ASSOCIATED TO YOUR NEWEGG ACCOUNT");
                     });
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
 
@@ -81,6 +83,8 @@ public class Application {
                     Thread.sleep(getRandom(MIN_WAIT, MAX_WAIT));
 
                     System.out.println("BOUGHT?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?");
+
+                    isPresent = true;
                 } else {
                     System.out.println("************* UNAVAILABLE *************");
                     driver.navigate().refresh();

@@ -12,10 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -31,11 +29,14 @@ public class Runner {
     private static FileHandler fh;
     private static final Logger logger = Logger.getLogger("pooplog");
 
+
     public static void main(String[] args) {
         List<Product> scrape3080;
         List<Product> scrape6800xt;
         List<Product> scrapeCpu;
         List<Product> scrapePs5;
+
+        Set<Product> visitedProducts = new HashSet<>();
 
         Scraper scraper = new DefaultScraper(new BestbuyScraper(), new NeweggScraper(), new BhPhotoScraper());
 
@@ -47,7 +48,6 @@ public class Runner {
 
             View view = new View();
 
-            boolean triggerBuyer = true;
 
             while (true) {
                 logger.info("Scraping... ");
@@ -64,18 +64,18 @@ public class Runner {
                     List<Product> products = Stream.of(scrape3080, scrape6800xt, scrapeCpu, scrapePs5).
                             flatMap(Collection::stream).collect(Collectors.toList());
 
+                    visitedProducts.addAll(products);
+
                     startAlert(view, products);
 
-                    if (triggerBuyer) {
+                    List<String> neweggLinks = products.stream()
+                            .filter(Predicate.not(visitedProducts::contains))
+                            .filter(p -> StringUtils.containsIgnoreCase(p.getUrl(), "newegg"))
+                            .map(Product::getUrl)
+                            .collect(Collectors.toList());
 
-                        List<String> neweggLinks = products.stream()
-                                .filter(p -> StringUtils.containsIgnoreCase(p.getUrl(), "newegg"))
-                                .map(Product::getUrl)
-                                .collect(Collectors.toList());
+                    triggerBuyer(neweggLinks);
 
-                        triggerBuyer(neweggLinks);
-                        triggerBuyer = false;
-                    }
                 } else {
                     scrape3080 = scraper.scrape(Arrays.asList(urls.get(0), urls.get(4)), true);
 
