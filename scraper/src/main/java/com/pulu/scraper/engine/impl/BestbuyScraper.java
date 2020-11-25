@@ -21,14 +21,14 @@ public class BestbuyScraper extends DefaultScraper {
 
     @Override
     public List<Product> scrape(String uri, boolean inStock) {
-
         if (!uri.contains("bestbuy")) {
             return Collections.emptyList();
         }
+
         List<Product> ret = new ArrayList<>();
 
         try {
-            Document page = Jsoup.parse(new URL(uri), 8000);
+            Document page = Jsoup.parse(new URL(uri), 5000);
 
 
             page.select("div[class=right-column]").forEach(it -> {

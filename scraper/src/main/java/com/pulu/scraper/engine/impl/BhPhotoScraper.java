@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ public class BhPhotoScraper extends DefaultScraper {
         List<Product> ret = new ArrayList<>();
 
         try {
-            Document page = Jsoup.connect(uri).get();
+            Document page = Jsoup.parse(new URL(uri), 5000);
 
             page.getElementsByAttributeValue("data-selenium", "miniProductPageProduct").forEach(it -> {
                 String name = it.getElementsByAttributeValue("data-selenium", "miniProductPageProductName").text();
