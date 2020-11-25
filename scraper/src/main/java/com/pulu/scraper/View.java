@@ -22,27 +22,32 @@ public class View {
 
     private List<Product> data3080 = new ArrayList<>();
     private List<Product> data6800xt = new ArrayList<>();
+    private List<Product> data3070 = new ArrayList<>();
     private List<Product> dataCpu = new ArrayList<>();
     private List<Product> dataPS5 = new ArrayList<>();
 
     JFrame frame = new JFrame();
     private final UrlTextPane pane3080 = new UrlTextPane();
     private final UrlTextPane pane6800xt = new UrlTextPane();
+    private final UrlTextPane pane3070 = new UrlTextPane();
     private final UrlTextPane paneCpu = new UrlTextPane();
     private final UrlTextPane panePS5 = new UrlTextPane();
 
     private final JTextField urlNewegg3080 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3080&N=100007709%20601357282%204021&isdeptsrh=1");
     private final JTextField urlNewegg6800xt = new JTextField("https://www.newegg.com/p/pl?d=radeon+6800+XT&N=100007709&isdeptsrh=1");
+    private final JTextField urlNewegg3070 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3070&N=100007709&isdeptsrh=1&LeftPriceRange=0+650");
     private final JTextField urlNeweggCpu = new JTextField("https://www.newegg.com/p/pl?d=ryzen+5000&N=50001028%20601301117%20100007671");
     private final JTextField urlNeweggPS5 = new JTextField("https://www.newegg.com/p/pl?d=playstation+5&N=101696840&isdeptsrh=1");
 
     private final JTextField urlBestbuy3080 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?st=3080+rtx");
     private final JTextField urlBestbuy6800xt = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=category_facet%3DGPUs%20%2F%20Video%20Graphics%20Cards~abcat0507002&sc=Global&st=radeon%206800%20xt&type=page&usc=All%20Categories");
+    private final JTextField urlBestbuy3070 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?st=3070+rtx");
     private final JTextField urlBestbuyCpu = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=brand_facet%3DBrand~AMD&sc=Global&st=amd%20ryzen%205900&type=page&usc=All%20Categories");
     private final JTextField urlBestbuyPS5 = new JTextField("https://www.bestbuy.com/site/playstation-5/ps5-consoles/pcmcat1587395025973.c?id=pcmcat1587395025973");
 
     private final JTextField urlBhPhoto3080 = new JTextField();
     private final JTextField urlBhPhoto6800xt = new JTextField();
+    private final JTextField urlBhPhoto3070 = new JTextField();
     private final JTextField urlBhPhotoCpu = new JTextField("https://www.bhphotovideo.com/c/search?q=ryzen%205000&filters=fct_category%3Acpus_19865%2Cfct_price%3A500..550");
     private final JTextField urlBhPhotoPs5 = new JTextField("https://www.bhphotovideo.com/c/search?q=playstation%205&filters=fct_category%3Aplaystation_5_consoles_48557");
 
@@ -53,12 +58,14 @@ public class View {
 
         JPanel panel3080 = new JPanel();
         JPanel panel6800xt = new JPanel();
+        JPanel panel3070 = new JPanel();
         JPanel panelCpu = new JPanel();
         JPanel panelPs5 = new JPanel();
 
         Timer timer = new Timer(1000, e -> {
             pane3080.setText(convertText(data3080));
             pane6800xt.setText(convertText(data6800xt));
+            pane3070.setText(convertText(data3070));
             paneCpu.setText(convertText(dataCpu));
             panePS5.setText(convertText(dataPS5));
         });
@@ -73,9 +80,9 @@ public class View {
                 inStock = true;
                 enableScrape.setBackground(Color.GREEN);
             }
-            setUrls(urlNewegg3080.getText(), urlNewegg6800xt.getText(), urlNeweggCpu.getText(), urlNeweggPS5.getText(),
-                    urlBestbuy3080.getText(), urlBestbuy6800xt.getText(), urlBestbuyCpu.getText(), urlBestbuyPS5.getText(),
-                    urlBhPhoto3080.getText(), urlBhPhoto6800xt.getText(), urlBhPhotoCpu.getText(), urlBhPhotoPs5.getText());
+            setUrls(urlNewegg3080.getText(), urlNewegg6800xt.getText(), urlNewegg3070.getText(), urlNeweggCpu.getText(), urlNeweggPS5.getText(),
+                    urlBestbuy3080.getText(), urlBestbuy6800xt.getText(), urlBestbuy3070.getText(), urlBestbuyCpu.getText(), urlBestbuyPS5.getText(),
+                    urlBhPhoto3080.getText(), urlBhPhoto6800xt.getText(), urlBhPhoto3070.getText(), urlBhPhotoCpu.getText(), urlBhPhotoPs5.getText());
         });
 
         enableMute.setBackground(Color.RED);
@@ -90,9 +97,10 @@ public class View {
         });
 
         JPanel mainContainer = new JPanel();
-        mainContainer.setLayout(new GridLayout(1, 4));
+        mainContainer.setLayout(new GridLayout(1, 5));
         mainContainer.add(new JScrollPane(setUpPanel(panel3080, pane3080, "Nvidia RTX 3080 Tracker", "RTX 3080")));
         mainContainer.add(new JScrollPane(setUpPanel(panel6800xt, pane6800xt, "AMD Radeon 6800XT Tracker", "Radeon 6800XT")));
+        mainContainer.add(new JScrollPane(setUpPanel(panel3070, pane3070, "Nvidia RTX 3070 Tracker", "RTX 3070")));
         mainContainer.add(new JScrollPane(setUpPanel(panelCpu, paneCpu, "AMD Ryzen 5000 Series Tracker", "Ryzen 5000 Series")));
         mainContainer.add(new JScrollPane(setUpPanel(panelPs5, panePS5, "Playstation 5 Tracker", "Playstation 5 Console")));
         mainContainer.setPreferredSize(new Dimension(1900, 800));
@@ -101,28 +109,30 @@ public class View {
         urlContainer.setLayout(new GridLayout(4, 5));
         urlContainer.setPreferredSize(new Dimension(1880, 110));
         urlContainer.add(new JLabel());
-        JLabel rtxLabel = new JLabel("Geforce RTX 3080 URLS");
-        rtxLabel.setPreferredSize(new Dimension(50, 120));
-        urlContainer.add(rtxLabel);
+        urlContainer.add(new JLabel("Geforce RTX 3080 URLS"));
         urlContainer.add(new JLabel("Radeon 6800XT URLS"));
+        urlContainer.add(new JLabel("Geforce RTX 3070 URLS"));
         urlContainer.add(new JLabel("AMD Ryzen 5000 Series CPU URLS"));
         urlContainer.add(new JLabel("Playstation 5 URLS"));
         JLabel neweggLabel = new JLabel("Newegg");
         urlContainer.add(neweggLabel);
         urlContainer.add(urlNewegg3080);
         urlContainer.add(urlNewegg6800xt);
+        urlContainer.add(urlNewegg3070);
         urlContainer.add(urlNeweggCpu);
         urlContainer.add(urlNeweggPS5);
         JLabel bestbuyLabel = new JLabel("Bestbuy");
         urlContainer.add(bestbuyLabel);
         urlContainer.add(urlBestbuy3080);
         urlContainer.add(urlBestbuy6800xt);
+        urlContainer.add(urlBestbuy3070);
         urlContainer.add(urlBestbuyCpu);
         urlContainer.add(urlBestbuyPS5);
         JLabel bhBhotoLabel = new JLabel("BH Photo Video");
         urlContainer.add(bhBhotoLabel);
         urlContainer.add(urlBhPhoto3080);
         urlContainer.add(urlBhPhoto6800xt);
+        urlContainer.add(urlBhPhoto3070);
         urlContainer.add(urlBhPhotoCpu);
         urlContainer.add(urlBhPhotoPs5);
 
@@ -159,6 +169,10 @@ public class View {
         data6800xt = data;
     }
 
+    public void set3070Content(List<Product> data) {
+        data3070 = data;
+    }
+
     public void setCpuContent(List<Product> data) {
         dataCpu = data;
     }
@@ -170,30 +184,36 @@ public class View {
     public void setUrls(String... urls) {
         urlNewegg3080.setText(urls[0]);
         urlNewegg6800xt.setText(urls[1]);
-        urlNeweggCpu.setText(urls[2]);
-        urlNeweggPS5.setText(urls[3]);
-        urlBestbuy3080.setText(urls[4]);
-        urlBestbuy6800xt.setText(urls[5]);
-        urlBestbuyCpu.setText(urls[6]);
-        urlBestbuyPS5.setText(urls[7]);
-        urlBhPhoto3080.setText(urls[8]);
-        urlBhPhoto6800xt.setText(urls[9]);
-        urlBhPhotoCpu.setText(urls[10]);
-        urlBhPhotoPs5.setText(urls[11]);
+        urlNewegg3070.setText(urls[2]);
+        urlNeweggCpu.setText(urls[3]);
+        urlNeweggPS5.setText(urls[4]);
+        urlBestbuy3080.setText(urls[5]);
+        urlBestbuy6800xt.setText(urls[6]);
+        urlBestbuy3070.setText(urls[7]);
+        urlBestbuyCpu.setText(urls[8]);
+        urlBestbuyPS5.setText(urls[9]);
+        urlBhPhoto3080.setText(urls[10]);
+        urlBhPhoto6800xt.setText(urls[11]);
+        urlBhPhoto3070.setText(urls[12]);
+        urlBhPhotoCpu.setText(urls[13]);
+        urlBhPhotoPs5.setText(urls[14]);
     }
 
     public List<String> getUrls() {
         List<String> ret = new ArrayList<>();
         ret.add(urlNewegg3080.getText());
         ret.add(urlNewegg6800xt.getText());
+        ret.add(urlNewegg3070.getText());
         ret.add(urlNeweggCpu.getText());
         ret.add(urlNeweggPS5.getText());
         ret.add(urlBestbuy3080.getText());
         ret.add(urlBestbuy6800xt.getText());
+        ret.add(urlBestbuy3070.getText());
         ret.add(urlBestbuyCpu.getText());
         ret.add(urlBestbuyPS5.getText());
         ret.add(urlBhPhoto3080.getText());
         ret.add(urlBhPhoto6800xt.getText());
+        ret.add(urlBhPhoto3070.getText());
         ret.add(urlBhPhotoCpu.getText());
         ret.add(urlBhPhotoPs5.getText());
         return ret;

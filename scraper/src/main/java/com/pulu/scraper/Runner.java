@@ -1,6 +1,6 @@
 package com.pulu.scraper;
 
-import com.pulu.buyer.Application;
+import com.pulu.buyer.NeweggEngine;
 import com.pulu.scraper.engine.Scraper;
 import com.pulu.scraper.engine.impl.BestbuyScraper;
 import com.pulu.scraper.engine.impl.BhPhotoScraper;
@@ -31,8 +31,12 @@ public class Runner {
 
 
     public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.args", "--disable-logging");
+
         List<Product> scrape3080;
         List<Product> scrape6800xt;
+        List<Product> scrape3070;
         List<Product> scrapeCpu;
         List<Product> scrapePs5;
 
@@ -53,15 +57,17 @@ public class Runner {
                 logger.info("Scraping... ");
                 List<String> urls = view.getUrls();
                 if (view.inStock) {
-                    scrape3080 = scraper.scrape(Arrays.asList(urls.get(0), urls.get(4)), false);
+                    scrape3080 = scraper.scrape(Arrays.asList(urls.get(0), urls.get(5)), false);
 
-                    scrape6800xt = scraper.scrape(Arrays.asList(urls.get(1), urls.get(5)), false);
+                    scrape6800xt = scraper.scrape(Arrays.asList(urls.get(1), urls.get(6)), false);
 
-                    scrapeCpu = scraper.scrape(Arrays.asList(urls.get(2), urls.get(6), urls.get(10)), false);
+                    scrape3070 = scraper.scrape(Arrays.asList(urls.get(2), urls.get(7)), false);
 
-                    scrapePs5 = scraper.scrape(Arrays.asList(urls.get(3), urls.get(7), urls.get(11)), false);
+                    scrapeCpu = scraper.scrape(Arrays.asList(urls.get(3), urls.get(8), urls.get(13)), false);
 
-                    List<Product> products = Stream.of(scrape3080, scrape6800xt, scrapeCpu, scrapePs5).
+                    scrapePs5 = scraper.scrape(Arrays.asList(urls.get(4), urls.get(9), urls.get(14)), false);
+
+                    List<Product> products = Stream.of(scrape3080, scrape6800xt,scrape3070, scrapeCpu, scrapePs5).
                             flatMap(Collection::stream).collect(Collectors.toList());
 
                     visitedProducts.addAll(products);
@@ -77,16 +83,19 @@ public class Runner {
                     triggerBuyer(neweggLinks);
 
                 } else {
-                    scrape3080 = scraper.scrape(Arrays.asList(urls.get(0), urls.get(4)), true);
+                    scrape3080 = scraper.scrape(Arrays.asList(urls.get(0), urls.get(5)), true);
 
-                    scrape6800xt = scraper.scrape(Arrays.asList(urls.get(1), urls.get(5)), true);
+                    scrape6800xt = scraper.scrape(Arrays.asList(urls.get(1), urls.get(6)), true);
 
-                    scrapeCpu = scraper.scrape(Arrays.asList(urls.get(2), urls.get(6), urls.get(10)), true);
+                    scrape3070 = scraper.scrape(Arrays.asList(urls.get(2), urls.get(7)), true);
 
-                    scrapePs5 = scraper.scrape(Arrays.asList(urls.get(3), urls.get(7), urls.get(11)), true);
+                    scrapeCpu = scraper.scrape(Arrays.asList(urls.get(3), urls.get(8), urls.get(13)), true);
+
+                    scrapePs5 = scraper.scrape(Arrays.asList(urls.get(4), urls.get(9), urls.get(14)), true);
                 }
                 view.set3080Content(scrape3080);
                 view.set6800xtContent(scrape6800xt);
+                view.set3070Content(scrape3070);
                 view.setCpuContent(scrapeCpu);
                 view.setPs5Content(scrapePs5);
                 sleep(3000);
@@ -98,7 +107,7 @@ public class Runner {
 
     private static void triggerBuyer(List<String> neweggLinks) {
         neweggLinks.forEach(url -> {
-            new Thread(() -> new Application().start(url)).start();
+            new Thread(() -> new NeweggEngine().start(url)).start();
         });
     }
 
