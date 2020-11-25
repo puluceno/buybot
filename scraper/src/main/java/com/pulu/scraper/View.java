@@ -56,7 +56,7 @@ public class View {
         JPanel panelCpu = new JPanel();
         JPanel panelPs5 = new JPanel();
 
-        Timer timer = new Timer(2500, e -> {
+        Timer timer = new Timer(1000, e -> {
             pane3080.setText(convertText(data3080));
             pane6800xt.setText(convertText(data6800xt));
             paneCpu.setText(convertText(dataCpu));

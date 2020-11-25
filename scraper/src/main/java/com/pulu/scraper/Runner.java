@@ -89,7 +89,7 @@ public class Runner {
                 view.set6800xtContent(scrape6800xt);
                 view.setCpuContent(scrapeCpu);
                 view.setPs5Content(scrapePs5);
-                sleep(5000);
+                sleep(3000);
             }
         } catch (Exception e) {
             logger.warning("Main Error detected: " + e.toString() + "\r\n         Stacktrace: " + Arrays.toString(e.getStackTrace()));
