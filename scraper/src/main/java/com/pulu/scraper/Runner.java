@@ -20,8 +20,6 @@ import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.lang.Thread.sleep;
-
 public class Runner {
 
     private static BufferedInputStream bufferedInputStream;
@@ -31,7 +29,7 @@ public class Runner {
 
 
     public static void main(String[] args) {
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "scraper/src/main/resources/chromedriver.exe");
         System.setProperty("webdriver.chrome.args", "--disable-logging");
 
         List<Product> scrape3080;
@@ -67,10 +65,8 @@ public class Runner {
 
                     scrapePs5 = scraper.scrape(Arrays.asList(urls.get(4), urls.get(9), urls.get(14)), false);
 
-                    List<Product> products = Stream.of(scrape3080, scrape6800xt,scrape3070, scrapeCpu, scrapePs5).
+                    List<Product> products = Stream.of(scrape3080, scrape6800xt, scrape3070, scrapeCpu, scrapePs5).
                             flatMap(Collection::stream).collect(Collectors.toList());
-
-                    visitedProducts.addAll(products);
 
                     startAlert(view, products);
 
@@ -79,6 +75,8 @@ public class Runner {
                             .filter(p -> StringUtils.containsIgnoreCase(p.getUrl(), "newegg"))
                             .map(Product::getUrl)
                             .collect(Collectors.toList());
+
+                    visitedProducts.addAll(products);
 
                     triggerBuyer(neweggLinks);
 
@@ -98,7 +96,6 @@ public class Runner {
                 view.set3070Content(scrape3070);
                 view.setCpuContent(scrapeCpu);
                 view.setPs5Content(scrapePs5);
-                sleep(1000);
             }
         } catch (Exception e) {
             logger.warning("Main Error detected: " + e.toString() + "\r\n         Stacktrace: " + Arrays.toString(e.getStackTrace()));
@@ -106,9 +103,9 @@ public class Runner {
     }
 
     private static void triggerBuyer(List<String> neweggLinks) {
-        neweggLinks.forEach(url -> {
-            new Thread(() -> new NeweggEngine().start(url)).start();
-        });
+        neweggLinks.forEach(url ->
+                new Thread(() -> new NeweggEngine().start(url)).start()
+        );
     }
 
     private static void startAlert(View view, List<Product> scrapeResult) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
