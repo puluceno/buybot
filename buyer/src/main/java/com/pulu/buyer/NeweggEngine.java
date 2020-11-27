@@ -29,11 +29,11 @@ public class NeweggEngine {
 
                     exists(driver, By.xpath("//*[text()='" + "Sign in / Register" + "']")).ifPresent(WebElement::click);
 
-                    exists(driver, By.name("signEmail")).ifPresent(el -> el.sendKeys("puluceno@gmail.com"));
+                    exists(driver, By.name("signEmail")).ifPresent(el -> el.sendKeys(//TODO: EMAIL""));
 
                     exists(driver, By.name("signIn")).ifPresent(WebElement::click);
 
-                    exists(driver, By.name("password")).ifPresent(el -> el.sendKeys("git909abcX*"));
+                    exists(driver, By.name("password")).ifPresent(el -> el.sendKeys(//TODO: PASSWORD""));
 
                     exists(driver, By.name("signIn")).ifPresent(WebElement::click);
 
@@ -47,7 +47,7 @@ public class NeweggEngine {
 
                     exists(driver, By.cssSelector("#app > div > section > div > div > form > div.row-inner > div.row-body > div > div:nth-child(3) > div > div.checkout-step-body > div.checkout-step-done > div.card > div.retype-security-code > input")).ifPresent(el -> {
                         el.click();
-                        el.sendKeys("794");
+                        el.sendKeys(//TODO: CARD CVV"");
                     });
 
                     exists(driver, By.xpath("//*[text()='" + "Place Order" + "']")).ifPresent(WebElement::click);
