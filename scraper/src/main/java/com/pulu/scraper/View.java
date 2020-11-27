@@ -33,15 +33,15 @@ public class View {
     private final UrlTextPane paneCpu = new UrlTextPane();
     private final UrlTextPane panePS5 = new UrlTextPane();
 
-    private final JTextField urlNewegg3080 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3080&N=100007709%20601357282%204021&isdeptsrh=1");
-    private final JTextField urlNewegg6800xt = new JTextField("https://www.newegg.com/p/pl?d=radeon+6800+XT&N=100007709&isdeptsrh=1");
-    private final JTextField urlNewegg3070 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3070&N=100007709&isdeptsrh=1&LeftPriceRange=0+650");
+    private final JTextField urlNewegg3080 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3080&N=100007709%20601357282&isdeptsrh=1&LeftPriceRange=0+750");
+    private final JTextField urlNewegg6800xt = new JTextField("https://www.newegg.com/p/pl?d=radeon+6800+XT&N=100007709&isdeptsrh=1&LeftPriceRange=0+700");
+    private final JTextField urlNewegg3070 = new JTextField("https://www.newegg.com/p/pl?d=rtx+3070&N=100007709&isdeptsrh=1&LeftPriceRange=0+550");
     private final JTextField urlNeweggCpu = new JTextField("https://www.newegg.com/p/pl?d=ryzen+5000&N=50001028%20601301117%20100007671");
     private final JTextField urlNeweggPS5 = new JTextField("https://www.newegg.com/p/pl?d=playstation+5&N=101696840&isdeptsrh=1");
 
-    private final JTextField urlBestbuy3080 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?st=3080+rtx");
-    private final JTextField urlBestbuy6800xt = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=category_facet%3DGPUs%20%2F%20Video%20Graphics%20Cards~abcat0507002&sc=Global&st=radeon%206800%20xt&type=page&usc=All%20Categories");
-    private final JTextField urlBestbuy3070 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?st=3070+rtx");
+    private final JTextField urlBestbuy3080 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?qp=currentprice_facet%3DPrice~%24500%20-%20%24749.99&st=3080%20rtx");
+    private final JTextField urlBestbuy6800xt = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=category_facet%3Dabcat0507002%5Ecurrentprice_facet%3DPrice~%24500%20-%20%24749.99&sc=Global&st=radeon%206800%20xt&type=page&usc=All%20Categories");
+    private final JTextField urlBestbuy3070 = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?qp=currentprice_facet%3DPrice~0%20to%20550&st=3070%20rtx");
     private final JTextField urlBestbuyCpu = new JTextField("https://www.bestbuy.com/site/searchpage.jsp?_dyncharset=UTF-8&id=pcat17071&iht=y&keys=keys&ks=960&list=n&qp=brand_facet%3DBrand~AMD&sc=Global&st=amd%20ryzen%205900&type=page&usc=All%20Categories");
     private final JTextField urlBestbuyPS5 = new JTextField("https://www.bestbuy.com/site/playstation-5/ps5-consoles/pcmcat1587395025973.c?id=pcmcat1587395025973");
 

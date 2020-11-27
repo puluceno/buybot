@@ -33,7 +33,7 @@ public class NeweggEngine {
 
                     exists(driver, By.name("signIn")).ifPresent(WebElement::click);
 
-                    exists(driver, By.name("password")).ifPresent(el -> el.sendKeys("909abcX*"));
+                    exists(driver, By.name("password")).ifPresent(el -> el.sendKeys("git909abcX*"));
 
                     exists(driver, By.name("signIn")).ifPresent(WebElement::click);
 
